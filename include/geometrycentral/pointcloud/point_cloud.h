@@ -27,6 +27,9 @@ using PointData = MeshData<Point, T>;
 class PointCloud {
 
 public:
+
+  std::mutex mesh_mutex;
+
   // Initialize a point cloud with N points
   PointCloud(size_t nPts);
   virtual ~PointCloud();

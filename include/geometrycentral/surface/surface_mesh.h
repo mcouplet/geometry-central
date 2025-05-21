@@ -40,6 +40,9 @@ class RichSurfaceMeshData;
 class SurfaceMesh {
 
 public:
+
+  std::mutex mesh_mutex;
+
   // Build a halfedge mesh from polygons, with a list of 0-indexed vertices incident on each face, in CCW order.
   // Assumes that the vertex listing in polygons is dense; all indices from [0,MAX_IND) must appear in some face.
   // (some functions, like in meshio.h preprocess inputs to strip out unused indices).

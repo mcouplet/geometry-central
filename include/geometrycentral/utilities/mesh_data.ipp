@@ -85,6 +85,8 @@ void MeshData<E, T>::registerWithMesh() {
   // Used during default initialization
   if (mesh == nullptr) return;
 
+  std::lock_guard<std::mutex> lock(mesh->mesh_mutex);
+
   // Callback function on expansion
   std::function<void(size_t)> expandFunc = [&](size_t newSize) {
     size_t oldSize = data.size();
@@ -126,6 +128,8 @@ void MeshData<E, T>::deregisterWithMesh() {
 
   // Used during destruction of default-initializated object, for instance
   if (mesh == nullptr) return;
+
+  std::lock_guard<std::mutex> lock(mesh->mesh_mutex);
 
   getExpandCallbackList<E>(mesh).erase(expandCallbackIt);
   getPermuteCallbackList<E>(mesh).erase(permuteCallbackIt);
