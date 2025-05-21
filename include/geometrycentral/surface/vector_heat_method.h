@@ -25,6 +25,8 @@ public:
   // === Constructor
   VectorHeatMethodSolver(IntrinsicGeometryInterface& geom, double tCoef = 1.0);
 
+  // // === Destructor
+  // ~VectorHeatMethodSolver();
 
   // === Scalar Extension
   VertexData<double> extendScalar(const std::vector<std::tuple<Vertex, double>>& sources);

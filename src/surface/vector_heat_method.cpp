@@ -23,7 +23,28 @@ VectorHeatMethodSolver::VectorHeatMethodSolver(IntrinsicGeometryInterface& geom_
 
   geom.unrequireVertexLumpedMassMatrix();
   geom.unrequireEdgeLengths();
+
+  // Moved these calls from computeLogMap() to here to avoid thread issues
+  geom.requireFaceAreas();
+  geom.requireEdgeLengths();
+  geom.requireCornerAngles();
+  geom.requireEdgeCotanWeights();
+  geom.requireHalfedgeVectorsInVertex();
+  geom.requireTransportVectorsAlongHalfedge();
+  geom.requireVertexIndices();
+  geom.requireHalfedgeVectorsInFace();
 }
+
+// // Keeping this here for reference. 
+// // For some reason things break down if I define this destructor.
+// // I think we need to define all other move/assignment constructors.
+// // But who cares about unrequiring stuff anyways lol.
+// VectorHeatMethodSolver::~VectorHeatMethodSolver() {
+
+//   // Moved these calls from computeLogMap() to here to avoid thread issues
+//   geom.unrequireHalfedgeVectorsInVertex();
+//   geom.unrequireHalfedgeVectorsInFace();
+// }
 
 
 void VectorHeatMethodSolver::ensureHaveScalarHeatSolver() {
@@ -269,14 +290,6 @@ VectorHeatMethodSolver::transportTangentVectors(const std::vector<std::tuple<Sur
 
 
 VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const Vertex& sourceVert, double vertexDistanceShift) {
-  geom.requireFaceAreas();
-  geom.requireEdgeLengths();
-  geom.requireCornerAngles();
-  geom.requireEdgeCotanWeights();
-  geom.requireHalfedgeVectorsInVertex();
-  geom.requireTransportVectorsAlongHalfedge();
-  geom.requireVertexIndices();
-
 
   // Make sure systems have been built and factored
   ensureHaveVectorHeatSolver();
@@ -430,8 +443,6 @@ void VectorHeatMethodSolver::addVertexOutwardBall(Vertex vert, Vector<std::compl
 }
 
 VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& sourceP) {
-  geom.requireHalfedgeVectorsInVertex();
-  geom.requireHalfedgeVectorsInFace();
 
   switch (sourceP.type) {
   case SurfacePointType::Vertex: {
@@ -440,7 +451,6 @@ VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& so
     break;
   }
   case SurfacePointType::Edge: {
-    geom.requireHalfedgeVectorsInVertex();
 
     // Compute logmaps at both adjacent vertices
     Halfedge he = sourceP.edge.halfedge();
@@ -458,13 +468,10 @@ VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& so
       resultMap[v] = (1. - tBlend) * logmapTail[v] * tailRot + tBlend * logmapTip[v] * tipRot;
     }
 
-    geom.unrequireHalfedgeVectorsInVertex();
     return resultMap;
     break;
   }
   case SurfacePointType::Face: {
-    geom.requireHalfedgeVectorsInVertex();
-    geom.requireHalfedgeVectorsInFace();
 
     // Accumulate result from adjcent halfedges
     VertexData<Vector2> resultMap(mesh, Vector2::zero());
@@ -485,8 +492,6 @@ VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& so
     }
 
 
-    geom.unrequireHalfedgeVectorsInVertex();
-    geom.unrequireHalfedgeVectorsInFace();
     return resultMap;
     break;
   }
