@@ -58,7 +58,7 @@ void VectorHeatMethodSolver::ensureHaveScalarHeatSolver() {
   SparseMatrix<double> heatOp = massMat + shortTime * L;
   scalarHeatSolver.reset(new PositiveDefiniteSolver<double>(heatOp));
 
-  geom.unrequireCotanLaplacian();
+  // geom.unrequireCotanLaplacian();
 }
 
 void VectorHeatMethodSolver::ensureHaveVectorHeatSolver() {
@@ -81,7 +81,7 @@ void VectorHeatMethodSolver::ensureHaveVectorHeatSolver() {
       break;
     }
   }
-  geom.unrequireEdgeCotanWeights();
+  // geom.unrequireEdgeCotanWeights();
 
   if (isDelaunay) {
     vectorHeatSolver.reset(new PositiveDefiniteSolver<std::complex<double>>(vectorOp));
@@ -89,7 +89,7 @@ void VectorHeatMethodSolver::ensureHaveVectorHeatSolver() {
     vectorHeatSolver.reset(new SquareSolver<std::complex<double>>(vectorOp)); // not necessarily SPD without Delaunay
   }
 
-  geom.unrequireVertexConnectionLaplacian();
+  // geom.unrequireVertexConnectionLaplacian();
 }
 
 
@@ -103,7 +103,7 @@ void VectorHeatMethodSolver::ensureHavePoissonSolver() {
   // Build the operator
   poissonSolver.reset(new PositiveDefiniteSolver<double>(L));
 
-  geom.unrequireCotanLaplacian();
+  // geom.unrequireCotanLaplacian();
 }
 
 VertexData<double> VectorHeatMethodSolver::extendScalar(const std::vector<std::tuple<Vertex, double>>& sources) {
