@@ -20,6 +20,8 @@ public:
     listToJoin.push_back(this);
   }
 
+  std::mutex mutex;
+
   virtual ~DependentQuantity(){};
 
   std::function<void()> evaluateFunc;
