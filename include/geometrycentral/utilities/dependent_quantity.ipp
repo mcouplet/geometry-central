@@ -20,11 +20,17 @@ inline void DependentQuantity::ensureHave() {
 };
 
 inline void DependentQuantity::require() {
+
+  std::lock_guard<std::mutex> lock(mutex);
+
   requireCount++;
   ensureHave();
 }
 
 inline void DependentQuantity::unrequire() {
+
+  std::lock_guard<std::mutex> lock(mutex);
+
   requireCount--;
 
   if (requireCount < 0) {
