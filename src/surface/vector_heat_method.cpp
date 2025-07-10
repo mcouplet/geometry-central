@@ -371,9 +371,6 @@ VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const Vertex& sourceVe
   }
 }
 
-<<<<<<< HEAD
-VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const Vertex& sourceVert, double vertexDistanceShift) {
-=======
 VertexData<Vector2> VectorHeatMethodSolver::computeLogMap_AffineLocal(const Vertex& sourceVert) {
   ensureHaveVectorHeatSolver();
   ensureHaveAffineHeatSolver();
@@ -501,7 +498,6 @@ VertexData<Vector2> VectorHeatMethodSolver::computeLogMap_VectorHeat(const Verte
   geom.requireTransportVectorsAlongHalfedge();
   geom.requireVertexIndices();
 
->>>>>>> 79403470f55170883ae077b5e711b2f18808d094
 
   // Make sure systems have been built and factored
   ensureHaveVectorHeatSolver();
@@ -654,13 +650,9 @@ void VectorHeatMethodSolver::addVertexOutwardBall(Vertex vert, Vector<std::compl
   }
 }
 
-<<<<<<< HEAD
-VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& sourceP) {
-=======
 VertexData<Vector2> VectorHeatMethodSolver::computeLogMap(const SurfacePoint& sourceP, LogMapStrategy strategy) {
   geom.requireHalfedgeVectorsInVertex();
   geom.requireHalfedgeVectorsInFace();
->>>>>>> 79403470f55170883ae077b5e711b2f18808d094
 
   switch (sourceP.type) {
   case SurfacePointType::Vertex: {
